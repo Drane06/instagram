@@ -5,15 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>🎭 Briser la bulle de filtre !</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            /* Style Instagram: fond très léger */
             background-color: #f7f7f7; 
             min-height: 100vh;
             padding: 20px;
@@ -23,13 +18,12 @@
             max-width: 1200px;
             margin: 0 auto;
             background: white;
-            border-radius: 12px; /* Coins plus doux */
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); /* Ombre plus douce */
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
             overflow: hidden;
         }
 
         .header {
-            /* Style Instagram: Header blanc ou très clair */
             background: white;
             color: #333;
             padding: 30px;
@@ -40,19 +34,11 @@
         .header h1 {
             font-size: 2.5em;
             margin-bottom: 10px;
-            /* Couleur d'accent Instagram: un joli violet */
             color: #833ab4; 
         }
 
-        .activity {
-            display: none;
-            padding: 30px;
-            animation: slideIn 0.5s ease-out;
-        }
-
-        .activity.active {
-            display: block;
-        }
+        .activity { display: none; padding: 30px; animation: slideIn 0.5s ease-out; }
+        .activity.active { display: block; }
 
         @keyframes slideIn {
             from { opacity: 0; transform: translateX(20px); }
@@ -67,14 +53,14 @@
         }
 
         .profile-card {
-            background: white; /* Rendre les cartes plus sobres */
+            background: white;
             border-radius: 15px;
             padding: 20px;
             text-align: center;
-            border: 1px solid #dbdbdb; /* Bordure subtile */
+            border: 1px solid #dbdbdb;
             transition: all 0.3s ease;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
-            display: flex; /* Utilisation de flex pour centrer l'image */
+            display: flex;
             flex-direction: column;
             align-items: center;
         }
@@ -84,24 +70,20 @@
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
         }
         
-        /* Nouveau style pour l'image de profil */
+        .profile-image-container { width: 100%; }
         .profile-image-container img {
-            width: 100%; /* L'image prend toute la largeur de son conteneur */
+            width: 100%;
             max-width: 100%;
             height: auto;
-            border-radius: 12px; /* Coins arrondis pour l'image */
+            border-radius: 12px;
             margin-bottom: 15px;
-            border: 1px solid #eee; /* Petite bordure discrète */
+            border: 1px solid #eee;
         }
-        
-        /* L'ancienne classe profile-img n'est plus utilisée pour les icônes */
-        .profile-img { 
-            display: none;
-        }
+        .profile-img { display: none; }
 
         .drag-zone {
-            background: #fcfcfc; /* Zone de drop très légère */
-            border: 2px dashed #a8b9c8; /* Gris sobre */
+            background: #fcfcfc;
+            border: 2px dashed #a8b9c8;
             border-radius: 10px;
             min-height: 120px;
             margin: 15px 0;
@@ -112,13 +94,20 @@
             align-items: flex-start;
             align-content: flex-start;
             transition: all 0.3s ease;
-            width: 100%; /* S'assurer que la zone de glisser-déposer prend toute la largeur */
+            width: 100%;
+            cursor: copy;
         }
+        .drag-zone.drag-over { background: #eef1f6; border-color: #405de6; transform: scale(1.01); cursor: grabbing; }
 
-        .drag-zone.drag-over {
-            background: #eef1f6;
-            border-color: #405de6;
-            transform: scale(1.01);
+        /* Indice visuel quand la zone est vide */
+        .drag-zone:empty::after,
+        .drop-zone:empty::after {
+            content: "Dépose les suggestions ici";
+            display: block;
+            font-size: 14px;
+            color: #8aa0b3;
+            font-style: italic;
+            opacity: 0.9;
         }
 
         .suggestion-item {
@@ -131,35 +120,21 @@
             user-select: none;
             font-size: 14px;
             font-weight: 500;
-            border: 1px solid #dbdbdb; /* Bordure légère */
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05); /* Ombre très légère */
+            border: 1px solid #dbdbdb;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
         }
-
-        .suggestion-item:hover {
-            transform: scale(1.05);
-            border-color: #405de6;
-            box-shadow: 0 3px 8px rgba(64, 93, 230, 0.1);
-        }
-
-        .suggestion-item:active {
-            cursor: grabbing;
-            transform: scale(0.95);
-        }
+        .suggestion-item:hover { transform: scale(1.05); border-color: #405de6; box-shadow: 0 3px 8px rgba(64, 93, 230, 0.1); }
+        .suggestion-item:active { cursor: grabbing; transform: scale(0.95); }
 
         .suggestions-pool {
             background: white;
-            border: 1px solid #eee; /* Bordure très discrète */
+            border: 1px solid #eee;
             border-radius: 12px;
             padding: 20px;
             margin: 20px 0;
             box-shadow: 0 1px 5px rgba(0, 0, 0, 0.02);
         }
-
-        .suggestions-pool h3 {
-            color: #833ab4; /* Utiliser la couleur d'accent */
-            margin-bottom: 15px;
-            text-align: center;
-        }
+        .suggestions-pool h3 { color: #833ab4; margin-bottom: 15px; text-align: center; }
 
         .suggestions-grid {
             display: flex;
@@ -169,7 +144,6 @@
         }
 
         .btn {
-            /* Bouton en bleu/violet Instagram */
             background: linear-gradient(45deg, #405de6, #833ab4); 
             color: white;
             border: none;
@@ -181,38 +155,15 @@
             margin: 10px;
             box-shadow: 0 4px 10px rgba(64, 93, 230, 0.3);
         }
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(64, 93, 230, 0.5); }
 
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(64, 93, 230, 0.5);
-        }
+        .progress-bar { background: #e0e0e0; height: 6px; border-radius: 3px; margin: 20px 0; overflow: hidden; }
+        .progress-fill { background: linear-gradient(45deg, #833ab4, #fd1d1d, #fcb045); height: 100%; transition: width 0.5s ease; border-radius: 3px; }
 
-        .progress-bar {
-            background: #e0e0e0;
-            height: 6px;
-            border-radius: 3px;
-            margin: 20px 0;
-            overflow: hidden;
-        }
-
-        .progress-fill {
-            /* Dégradé Instagram pour la barre de progression */
-            background: linear-gradient(45deg, #833ab4, #fd1d1d, #fcb045); 
-            height: 100%;
-            transition: width 0.5s ease;
-            border-radius: 3px;
-        }
-
-        .score {
-            text-align: center;
-            font-size: 1.2em;
-            color: #333;
-            font-weight: bold;
-            margin: 15px 0;
-        }
+        .score { text-align: center; font-size: 1.2em; color: #333; font-weight: bold; margin: 15px 0; }
 
         .feedback {
-            background: #f0fff0; /* Feedback plus clair */
+            background: #f0fff0;
             border-left: 4px solid #4caf50;
             padding: 15px;
             margin: 15px 0;
@@ -230,12 +181,7 @@
             border-top: 1px solid #eee;
         }
 
-        .activity-title {
-            color: #333;
-            margin-bottom: 20px;
-            font-size: 1.8em;
-            text-align: center;
-        }
+        .activity-title { color: #333; margin-bottom: 20px; font-size: 1.8em; text-align: center; }
 
         .checklist {
             background: white;
@@ -244,26 +190,17 @@
             margin: 20px 0;
             border: 1px solid #eee;
         }
-
         .checklist-item {
             display: flex;
             align-items: center;
+            gap: 12px;
             margin: 10px 0;
             padding: 10px;
             border-radius: 8px;
             transition: background 0.3s ease;
         }
-
-        .checklist-item:hover {
-            background: #f7f9ff;
-        }
-
-        .checklist-item input[type="checkbox"] {
-            margin-right: 12px;
-            transform: scale(1.2);
-            /* Utilisation de l'accent bleu pour les checkbox si possible, mais on garde le style par défaut pour la compatibilité */
-            accent-color: #405de6;
-        }
+        .checklist-item:hover { background: #f7f9ff; }
+        .checklist-item input[type="checkbox"] { margin-right: 12px; transform: scale(1.2); accent-color: #405de6; }
 
         .vs-container {
             display: grid;
@@ -272,24 +209,8 @@
             align-items: start;
             margin: 20px 0;
         }
-
-        .vs-column {
-            background: #fcfcfc;
-            border-radius: 12px;
-            padding: 20px;
-            min-height: 200px;
-            border: 1px solid #eee;
-        }
-
-        .vs-separator {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2em;
-            font-weight: bold;
-            color: #405de6; /* Bleu d'accent */
-        }
-
+        .vs-column { background: #fcfcfc; border-radius: 12px; padding: 20px; min-height: 200px; border: 1px solid #eee; }
+        .vs-separator { display: flex; align-items: center; justify-content: center; font-size: 2em; font-weight: bold; color: #405de6; }
         .drop-zone {
             background: #f0f4f7;
             border: 2px dashed #a8b9c8;
@@ -301,15 +222,10 @@
             gap: 8px;
             padding: 10px;
             transition: all 0.3s ease;
+            cursor: copy;
         }
+        .drop-zone.drag-over { background: #eef1f6; border-color: #405de6; transform: scale(1.01); cursor: grabbing; }
 
-        .drop-zone.drag-over {
-            background: #eef1f6;
-            border-color: #405de6;
-            transform: scale(1.01);
-        }
-
-        /* Style neutre pour l'activité 3, comme demandé */
         .advantage-item, .disadvantage-item {
             padding: 8px 12px;
             border-radius: 20px;
@@ -317,22 +233,13 @@
             font-size: 14px;
             transition: all 0.3s ease;
             user-select: none;
-            background: #fcfcfc; /* Presque blanc */
+            background: #fcfcfc;
             color: #444;
-            border: 1px solid #dbdbdb; /* Bordure très légère pour la sobriété */
+            border: 1px solid #dbdbdb;
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
         }
-        
-        .advantage-item:hover, .disadvantage-item:hover {
-            transform: scale(1.05);
-            cursor: grab;
-            border-color: #a8b9c8;
-        }
-
-        .advantage-item:active, .disadvantage-item:active {
-            cursor: grabbing;
-            transform: scale(0.95);
-        }
+        .advantage-item:hover, .disadvantage-item:hover { transform: scale(1.05); cursor: grab; border-color: #a8b9c8; }
+        .advantage-item:active, .disadvantage-item:active { cursor: grabbing; transform: scale(0.95); }
     </style>
 </head>
 <body>
@@ -356,28 +263,22 @@
             <div class="profiles">
                 <!-- Profil 1: Liam_GoalAndGaming (Image: insta3.png) -->
                 <div class="profile-card" data-profile="liam">
-                    <!-- Remplacement de l'icône/texte par l'image du profil -->
                     <div class="profile-image-container">
-                        <!-- Remplacez le src ci-dessous par l'adresse de votre image -->
                         <img src="insta3.png" alt="Profil Instagram de Liam_GoalAndGaming (Football & Gaming)">
                     </div>
-                    <!-- Le titre et la description ne sont plus nécessaires s'ils sont dans l'image -->
                     <div class="drag-zone" data-profile="liam"></div>
                 </div>
 
                 <!-- Profil 2: Sophie.HomeAndHealth (Image: insta.png) -->
                 <div class="profile-card" data-profile="sophie">
-                    <!-- Remplacement de l'icône/texte par l'image du profil -->
                     <div class="profile-image-container">
                         <img src="insta.png" alt="Profil Instagram de Sophie.HomeAndHealth (Cuisine & Déco)" >
                     </div>
-                    <!-- Le titre et la description ne sont plus nécessaires s'ils sont dans l'image -->
                     <div class="drag-zone" data-profile="sophie"></div>
                 </div>
 
                 <!-- Profil 3: Ji-wouKim (Image: insta2.png) -->
                 <div class="profile-card" data-profile="jiwou">
-                    <!-- Remplacement de l'icône/texte par l'image du profil -->
                     <div class="profile-image-container">
                         <img src="insta2.png" alt="Profil Instagram de Ji-wouKim (K-pop & Mode)">
                     </div>
@@ -498,14 +399,13 @@
         <div class="activity" id="activity4">
             <h2 class="activity-title">🛠️ Activité 4 : Kit Anti-Bulle</h2>
             <p style="text-align: center; color: #666; margin-bottom: 30px;">
-                Proposez un **“kit anti-bulle filtre”** pour collégien. Écrivez 4 propositions pour reprendre le contrôle sur les recommandations IA et **appelez votre professeur pour vérification**.
+                Proposez un <strong>“kit anti-bulle filtre”</strong> pour collégien. Écrivez 4 propositions pour reprendre le contrôle sur les recommandations IA et <strong>appelez votre professeur pour vérification</strong>.
             </p>
 
             <textarea id="antiBubbleKit" rows="10" placeholder="Écrivez vos 4 propositions ici..." style="width: 100%; padding: 15px; border: 1px solid #dbdbdb; border-radius: 8px; font-size: 16px; resize: vertical; box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);"></textarea>
 
             <div class="navigation">
                 <button class="btn" onclick="previousActivity()">← Activité précédente</button>
-                <!-- Cette activité n'est pas vérifiée, elle sert juste de transition vers les résultats -->
                 <button class="btn" onclick="nextActivity()" id="nextA5">Voir la synthèse et mes résultats →</button>
             </div>
         </div>
@@ -550,11 +450,16 @@
         let currentActivity = 1;
         let totalScore = 0;
         let draggedElement = null;
-        const totalActivities = 5; // Nombre total d'étapes (3 quiz + 1 réflexion + 1 résultats)
+        const totalActivities = 5; // 3 quiz + 1 réflexion + 1 résultats
+
+        // ---- Helper: trouver la vraie zone de drop même si on vise un enfant ----
+        function getDropZone(el) {
+            return el ? el.closest('.drag-zone, .drop-zone') : null;
+        }
         
         // Système de drag and drop
         function setupDragAndDrop() {
-            // Pour les éléments draggables (Souris)
+            // SOURIS : éléments draggables
             document.addEventListener('dragstart', function(e) {
                 if (e.target.draggable) {
                     draggedElement = e.target;
@@ -570,32 +475,34 @@
                 }
             });
 
-            // Pour les zones de drop (Souris)
+            // SOURIS : zones de drop
             document.addEventListener('dragover', function(e) {
-                if (e.target.classList.contains('drag-zone') || e.target.classList.contains('drop-zone')) {
+                const zone = getDropZone(e.target);
+                if (zone) {
                     e.preventDefault();
-                    e.target.classList.add('drag-over');
+                    zone.classList.add('drag-over');
                 }
             });
 
             document.addEventListener('dragleave', function(e) {
-                if (e.target.classList.contains('drag-zone') || e.target.classList.contains('drop-zone')) {
-                    e.target.classList.remove('drag-over');
+                const zone = getDropZone(e.target);
+                if (zone) {
+                    zone.classList.remove('drag-over');
                 }
             });
 
             document.addEventListener('drop', function(e) {
-                if ((e.target.classList.contains('drag-zone') || e.target.classList.contains('drop-zone')) && draggedElement) {
+                const zone = getDropZone(e.target);
+                if (zone && draggedElement) {
                     e.preventDefault();
-                    e.target.classList.remove('drag-over');
-                    
-                    if (e.target !== draggedElement.parentNode) {
-                        e.target.appendChild(draggedElement);
+                    zone.classList.remove('drag-over');
+                    if (zone !== draggedElement.parentNode) {
+                        zone.appendChild(draggedElement);
                     }
                 }
             });
 
-            // Ajout de la gestion des événements tactiles pour la compatibilité mobile
+            // MOBILE : gestion tactile
             document.addEventListener('touchstart', function(e) {
                 if (e.target.draggable) {
                     e.preventDefault();
@@ -606,6 +513,7 @@
                     clone.style.position = 'absolute';
                     clone.style.zIndex = '1000';
                     clone.id = 'drag-clone';
+                    clone.style.pointerEvents = 'none';
                     document.body.appendChild(clone);
                     
                     const updatePosition = (touch) => {
@@ -615,34 +523,44 @@
 
                     updatePosition(e.touches[0]);
                     
-                    document.addEventListener('touchmove', function(moveEvent) {
+                    const onMove = (moveEvent) => {
                         moveEvent.preventDefault();
                         updatePosition(moveEvent.touches[0]);
                         
-                        const dropTarget = document.elementFromPoint(moveEvent.touches[0].clientX, moveEvent.touches[0].clientY);
+                        const raw = document.elementFromPoint(
+                            moveEvent.touches[0].clientX,
+                            moveEvent.touches[0].clientY
+                        );
+                        const dropTarget = getDropZone(raw);
                         document.querySelectorAll('.drag-zone, .drop-zone').forEach(zone => zone.classList.remove('drag-over'));
-                        if (dropTarget && (dropTarget.classList.contains('drag-zone') || dropTarget.classList.contains('drop-zone'))) {
-                            dropTarget.classList.add('drag-over');
-                        }
-                    }, { passive: false });
-                    
-                    document.addEventListener('touchend', function(endEvent) {
-                        const clone = document.getElementById('drag-clone');
-                        if (clone) {
-                            const dropTarget = document.elementFromPoint(endEvent.changedTouches[0].clientX, endEvent.changedTouches[0].clientY);
+                        if (dropTarget) dropTarget.classList.add('drag-over');
+                    };
+
+                    const onEnd = (endEvent) => {
+                        const cloneEl = document.getElementById('drag-clone');
+                        if (cloneEl) {
+                            const raw = document.elementFromPoint(
+                                endEvent.changedTouches[0].clientX,
+                                endEvent.changedTouches[0].clientY
+                            );
+                            const dropTarget = getDropZone(raw);
                             document.querySelectorAll('.drag-zone, .drop-zone').forEach(zone => zone.classList.remove('drag-over'));
 
-                            if (dropTarget && (dropTarget.classList.contains('drag-zone') || dropTarget.classList.contains('drop-zone'))) {
-                                if (dropTarget !== draggedElement.parentNode) {
-                                    dropTarget.appendChild(draggedElement);
-                                }
+                            if (dropTarget && dropTarget !== draggedElement.parentNode) {
+                                dropTarget.appendChild(draggedElement);
                             }
                             
                             draggedElement.style.opacity = '1';
                             draggedElement = null;
-                            clone.remove();
+                            cloneEl.remove();
                         }
-                    }, { once: true });
+
+                        document.removeEventListener('touchmove', onMove, { passive: false });
+                        document.removeEventListener('touchend', onEnd);
+                    };
+
+                    document.addEventListener('touchmove', onMove, { passive: false });
+                    document.addEventListener('touchend', onEnd, { once: true });
                 }
             }, { passive: false });
         }
@@ -659,11 +577,11 @@
                 items.forEach(item => {
                     if (item.dataset.target === profileTarget) {
                         correct++;
-                        item.style.background = '#e8f5e8'; /* Vert clair */
+                        item.style.background = '#e8f5e8';
                         item.style.color = '#2d5a2d';
                         item.style.border = '1px solid #4caf50';
                     } else {
-                        item.style.background = '#ffebee'; /* Rouge clair */
+                        item.style.background = '#ffebee';
                         item.style.color = '#5d1e1e';
                         item.style.border = '1px solid #f44336';
                     }
@@ -671,8 +589,7 @@
                 });
             });
             
-            // L'Activité 1 compte pour 40 points
-            const score = Math.round((correct / total) * 40);
+            const score = Math.round((correct / total) * 40); // Activité 1 = 40 pts
             totalScore += score;
             
             showFeedback(`Activité 1 : ${correct}/${total} bonnes réponses ! (+${score} points)`);
@@ -700,8 +617,7 @@
                 checkbox.disabled = true;
             });
             
-            // L'Activité 2 compte pour 30 points
-            const score = Math.round((correct / total) * 30);
+            const score = Math.round((correct / total) * 30); // Activité 2 = 30 pts
             totalScore += score;
             
             showFeedback(`Activité 2 : ${correct}/${total} bonnes réponses ! (+${score} points)`);
@@ -721,11 +637,11 @@
             advantageItems.forEach(item => {
                 if (item.dataset.type === 'advantage') {
                     correct++;
-                    item.style.border = '2px solid #4caf50'; // Correct: green border
-                    item.style.background = '#e8f5e8'; /* Vert clair */
+                    item.style.border = '2px solid #4caf50';
+                    item.style.background = '#e8f5e8';
                 } else {
-                    item.style.border = '2px solid #f44336'; // Incorrect: red border
-                    item.style.background = '#ffebee'; /* Rouge clair */
+                    item.style.border = '2px solid #f44336';
+                    item.style.background = '#ffebee';
                 }
                 item.draggable = false;
                 item.style.color = '#333';
@@ -736,18 +652,17 @@
             disadvantageItems.forEach(item => {
                 if (item.dataset.type === 'disadvantage') {
                     correct++;
-                    item.style.border = '2px solid #4caf50'; // Correct: green border
-                    item.style.background = '#e8f5e8'; /* Vert clair */
+                    item.style.border = '2px solid #4caf50';
+                    item.style.background = '#e8f5e8';
                 } else {
-                    item.style.border = '2px solid #f44336'; // Incorrect: red border
-                    item.style.background = '#ffebee'; /* Rouge clair */
+                    item.style.border = '2px solid #f44336';
+                    item.style.background = '#ffebee';
                 }
                 item.draggable = false;
                 item.style.color = '#333';
             });
             
-            // L'Activité 3 compte pour 30 points
-            const score = Math.round((correct / total) * 30);
+            const score = Math.round((correct / total) * 30); // Activité 3 = 30 pts
             totalScore += score;
             
             showFeedback(`Activité 3 : ${correct}/${total} bonnes réponses ! (+${score} points)`);
@@ -775,16 +690,17 @@
         }
 
         function nextActivity() {
-            document.querySelector('.activity.active').classList.remove('active');
-            
-            document.querySelector('.activity.active .feedback')?.remove();
+            const current = document.querySelector('.activity.active');
+            if (current) current.classList.remove('active');
+
+            // Nettoyer un éventuel feedback de l'activité précédente
+            current?.querySelector('.feedback')?.remove();
             
             currentActivity++;
             
             if (currentActivity <= totalActivities) {
                 document.getElementById(`activity${currentActivity}`).classList.add('active');
-                
-                if (currentActivity === totalActivities) { // 5 est l'étape des résultats
+                if (currentActivity === totalActivities) { // 5 = résultats
                     showFinalResults();
                 }
             }
@@ -798,7 +714,6 @@
                 currentActivity--;
                 document.getElementById(`activity${currentActivity}`).classList.add('active');
                 updateProgress();
-
                 document.querySelector('.activity.active .feedback')?.remove();
             }
         }
@@ -828,7 +743,7 @@
             document.querySelector('.activity.active')?.classList.remove('active');
             document.getElementById('activity1').classList.add('active');
             
-            // Reset all visual feedback and drag/check status
+            // Reset états visuels et drag/check
             document.querySelectorAll('.suggestion-item, .advantage-item, .disadvantage-item').forEach(item => {
                 item.style.background = ''; 
                 item.style.color = '';
@@ -863,7 +778,6 @@
             });
             
             document.querySelectorAll('[id^="nextA"]').forEach(btn => {
-                // Seul le bouton de l'activité 4 (transition) reste visible
                 if (btn.id !== 'nextA5') { 
                     btn.style.display = 'none';
                 }
@@ -876,7 +790,7 @@
         document.addEventListener('DOMContentLoaded', () => {
             setupDragAndDrop();
             updateProgress();
-            // Assurer que le style neutre est appliqué initialement pour l'activité 3
+            // Style neutre initial pour activité 3
             document.querySelectorAll('.advantage-item, .disadvantage-item').forEach(item => {
                 item.style.background = ''; 
             });
@@ -884,3 +798,4 @@
     </script>
 </body>
 </html>
+
